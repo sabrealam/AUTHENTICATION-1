@@ -20,7 +20,7 @@ userRouter.post("/register", async (req, res) => {
             if(err) throw new Error;
             user = await User.create({name, email, password : hash});
             
-            res.send({message : `User created successfully`, user : user});
+            res.json({message : `User created successfully`, user : user});
         });
     } catch (error) {
         res.status(500).send({def : `From Catch --> Register` , error : error});
@@ -34,18 +34,17 @@ userRouter.post("/login", async (req, res) => {
     try {
         let user = await User.findOne({email});
         if(!user) return res.status(400).send({message : `User does not exists`});
-        console.log(user)
+         
         let match = await bcrypt.compare(password, user.password);
         if(!match) return res.status(400).send({message : `Invalid credentials`});
-        user.id = user._id.toString();
+        // user.id = user._id.toString();
         // let token = jwt.sign({ id : user._id.toString() } , process.env.SECRET_KEY);
-
     let token = jwt.sign({
             exp: Math.floor(Date.now() / 1000) + (60 * 60),
-            data: { id : user._id.toString() }
+            data: { id : user._id.toString()  }
           }, process.env.SECRET_KEY);
 
-        res.send({message : `Login successful`, token : token, user : user});
+        res.json({message : `Login successful`, token : token, user : user});
     } catch (error) {
         res.status(500).send({def : `From Catch --> Login` , error : error});
     }

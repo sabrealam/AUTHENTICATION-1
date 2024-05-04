@@ -14,7 +14,7 @@ app.use(`/todos`, require("./route/todo.route"));
 
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send("Hello World from index.js This is static server");
 })
 
 app.listen(`${process.env.PORT}` || 5000, async() => {

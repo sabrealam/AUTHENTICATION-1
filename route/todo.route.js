@@ -5,7 +5,7 @@ const auth = require("../middlewere/auth");
 todoRouter.get(`/` , auth,  async (req, res) => {
  
     const todo = await Todo.find({UserID : req.UserID});
-    res.send({todos : todo});
+    res.json({todos : todo});
 });
  
 
@@ -15,7 +15,7 @@ todoRouter.post("/create", auth, async (req, res) => {
     try {
         let todo = await Todo.create({title, description , UserID : req.UserID});
         todo = await todo.save();
-        res.send({message : `Todo created successfully`, todo : todo , data : req.user});
+        res.json({message : `Todo created successfully`, todo : todo , data : req.user});
     } catch (error) {
         res.status(500).send({def : `From Catch --> Create` , error : error.message});
     }
@@ -28,7 +28,7 @@ todoRouter.put("/update/:id", auth, async (req, res) => {
         let todo = await Todo.findOne({UserID : id});
         if( todo.UserID != req.UserID) return res.status(400).send({message : `Unauthorized access`});
         todo = await Todo.updateOne({UserID : id} , {title, description});
-        res.send({message : `Todo updated successfully`, todo : todo});
+        res.json({message : `Todo updated successfully`, todo : todo});
     } catch (error) {
         res.status(500).send({def : `From Catch --> Update` , error : error.message});
     }
