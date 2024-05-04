@@ -20,7 +20,7 @@ userRouter.post("/register", async (req, res) => {
             if(err) throw new Error;
             user = await User.create({name, email, password : hash});
             
-            res.json({message : `User created successfully`, user : JSON.stringify(user)});
+            res.json({message : `User created successfully`, user : JSON.parse(user)});
         });
     } catch (error) {
         res.status(500).send({def : `From Catch --> Register` , error : error});
